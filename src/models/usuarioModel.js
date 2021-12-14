@@ -31,6 +31,7 @@ const usuarioSchema = new Schema({
     numerodocumento: {
         type: "number",
         required: true,
+        unique: true,
         min: 6
     },
     correo: {
@@ -40,7 +41,12 @@ const usuarioSchema = new Schema({
     rol: {
         type: "string",
         required: true
+    },
+    recuperar: {
+        type: "boolean"  
     }
+
+
 });
 
 usuarioSchema.pre("save", async function (next) {

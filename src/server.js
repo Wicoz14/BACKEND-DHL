@@ -9,6 +9,8 @@ app.use(cors()); //Middleware, permite que se conecten puertos públicos
 app.use(express.json());//Middleware, convierte lo que manda usuario a JSON
 
 app.use("/usuario", rutasUsuario);//Recortar rutas
+//app.use("/envios", rutasEnvio)
+//agregar rutas
 
 mongoose.connect(process.env.URL_database) //conexión a la BD
     .then(res => console.log("Conectado a DB"))

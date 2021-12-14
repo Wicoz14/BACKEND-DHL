@@ -4,12 +4,13 @@ const { usuarioModel } = require("../models/usuarioModel.js")
 const { compare } = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 const { usuarioGuard } = require("../guard/usuarioGuard.js");
+const { enviarCorreo } = require("./recuperarController.js")
 
-rutasUsuario.post("/login", async function(req,res) {
-    const {usuario, contraseña} = req.body;
-    const user = await usuarioModel.findOne({usuario});
+rutasUsuario.post("/login", async function (req, res) {
+    const { usuario, contraseña } = req.body;
+    const user = await usuarioModel.findOne({ usuario });
 
-    if(!user){
+    if (!user) {
         return res.status(401).send({ estado: "Error", msg: "Credenciales No Válidas" });
     }
 
@@ -22,7 +23,7 @@ rutasUsuario.post("/login", async function(req,res) {
             },
             process.env.JWT_SECRET_KEY
         )
-        return res.status(200).send({ estado: "Ok", msg: "Logueado", token });
+        return res.status(200).send({ estado: "Ok", msg: "Logueado", token, rol: user.rol });
     }
     return res.status(401).send({ estado: "error", msg: "Credenciales NO válidas" });
 });
@@ -35,11 +36,27 @@ rutasUsuario.post("/registrousuario", function (req, res) {
     const usuario = new usuarioModel(data);
     // Guarda en BD
     usuario.save(function (error) {
+        console.log(error);
         if (error) {
             return res.status(500).send({ estado: "Error", msg: "Error: Usuario No Guardado" });
         }
-        return res.status(200).send({ estado: "ok", msg: "Guardado" });
+        return res.status(200).send({ estado: "Ok", msg: "Guardado" });
     });
+});
+
+rutasUsuario.post("/recuperarcontrasena", async function (req, res) {
+    const correo = req.body;
+    const email = await usuarioModel.findOne(correo);
+    if (!email) {
+        return res.status(401).send({ estado: "Error", msg: "Correo No Registrado" });
+    }
+    else {
+        let nuevacontraseña = await enviarCorreo(email.correo);
+
+        await usuarioModel.updateOne({ "correo": email.correo }, { "contraseña": nuevacontraseña, "recuperar":true})
+
+        return res.status(200).send({ estado: "Ok", msg: "Contraseña Enviada" });
+    }
 });
 
 exports.rutasUsuario = rutasUsuario;
