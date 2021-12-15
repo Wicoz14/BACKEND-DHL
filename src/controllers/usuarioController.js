@@ -66,7 +66,7 @@ rutasUsuario.post("/nuevacontrasena", async function (req, res) {
     const salt = await genSalt(+process.env.BCRYPT_ROUNDS);
     nuevaContraseña = await hash(contraseña, salt);
 
-    await usuarioModel.updateOne({"usuario": usuario},{"contraseña": nuevaContraseña})
+    await usuarioModel.updateOne({"usuario": usuario},{"contraseña": nuevaContraseña , "recuperar": false})
     return res.status(200).send({ estado: "Ok", msg: "Contraseña Actualizada"});
 });
 
