@@ -1,10 +1,10 @@
 const { Router } = require("express");
 const rutasUsuario = Router();
 const { usuarioModel } = require("../models/usuarioModel.js")
-const { compare } = require("bcryptjs");
+const { compare, genSalt, hash } = require("bcryptjs");
 const { sign } = require("jsonwebtoken");
 const { usuarioGuard } = require("../guard/usuarioGuard.js");
-const { enviarCorreo } = require("./recuperarController.js")
+const { enviarCorreo, enviarCorreoRegistro } = require("./recuperarController.js")
 
 rutasUsuario.post("/login", async function (req, res) {
     const { usuario, contraseña } = req.body;
@@ -23,7 +23,7 @@ rutasUsuario.post("/login", async function (req, res) {
             },
             process.env.JWT_SECRET_KEY
         )
-        return res.status(200).send({ estado: "Ok", msg: "Logueado", token, rol: user.rol });
+        return res.status(200).send({ estado: "Ok", msg: "Logueado", token, rol: user.rol, recuperar: user.recuperar });
     }
     return res.status(401).send({ estado: "error", msg: "Credenciales NO válidas" });
 });
@@ -32,15 +32,16 @@ rutasUsuario.post("/login", async function (req, res) {
 rutasUsuario.post("/registrousuario", function (req, res) {
     // Captura los datos
     const data = req.body;
+    const correo = data.correo;
     // Instancia el modelo y pobla con los datos
     const usuario = new usuarioModel(data);
     // Guarda en BD
     usuario.save(function (error) {
-        console.log(error);
         if (error) {
             return res.status(500).send({ estado: "Error", msg: "Error: Usuario No Guardado" });
         }
-        return res.status(200).send({ estado: "Ok", msg: "Guardado" });
+        enviarCorreoRegistro(correo);
+        return res.status(200).send({ estado: "Ok", msg: "Guardado" })
     });
 });
 
@@ -57,6 +58,16 @@ rutasUsuario.post("/recuperarcontrasena", async function (req, res) {
 
         return res.status(200).send({ estado: "Ok", msg: "Contraseña Enviada" });
     }
+});
+
+
+rutasUsuario.post("/nuevacontrasena", async function (req, res) {
+    const { usuario, contraseña } = req.body;
+    const salt = await genSalt(+process.env.BCRYPT_ROUNDS);
+    nuevaContraseña = await hash(contraseña, salt);
+
+    await usuarioModel.updateOne({"usuario": usuario},{"contraseña": nuevaContraseña})
+    return res.status(200).send({ estado: "Ok", msg: "Contraseña Actualizada"});
 });
 
 exports.rutasUsuario = rutasUsuario;
