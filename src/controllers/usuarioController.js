@@ -2,8 +2,8 @@ const { Router } = require("express");
 const rutasUsuario = Router();
 const { usuarioModel } = require("../models/usuarioModel.js")
 const { compare, genSalt, hash } = require("bcryptjs");
-const { sign } = require("jsonwebtoken");
-const { usuarioGuard } = require("../guard/usuarioGuard.js");
+const { sign, verify } = require("jsonwebtoken");
+const { usuarioAuthGuard } = require("../Middleware/usuarioAuthGuard.js");
 const { enviarCorreo, enviarCorreoRegistro } = require("./recuperarController.js")
 
 rutasUsuario.post("/login", async function (req, res) {
@@ -19,7 +19,8 @@ rutasUsuario.post("/login", async function (req, res) {
         const token = sign(
             {
                 usuario: user.usuario,
-                rol: user.rol
+                rol: user.rol,
+                id: user._id
             },
             process.env.JWT_SECRET_KEY
         )
@@ -61,10 +62,20 @@ rutasUsuario.post("/recuperarcontrasena", async function (req, res) {
 });
 
 
-rutasUsuario.post("/nuevacontrasena", async function (req, res) {
-    const { usuario, contraseña } = req.body;
+rutasUsuario.post("/nuevacontrasena", usuarioAuthGuard, async function (req, res) {
+    const authorization = req.headers.authorization;
+    const {contraseña } = req.body;
     const salt = await genSalt(+process.env.BCRYPT_ROUNDS);
     nuevaContraseña = await hash(contraseña, salt);
+    try {
+        const token = authorization.split(" ")[1];
+        const payload = verify(token, process.env.JWT_SECRET_KEY);
+        await usuarioModel.updateOne({"usuario": payload.usuario},{"contraseña": nuevaContraseña , "recuperar": false})
+        return res.status(200).send({ estado: "Ok", msg: "Contraseña Actualizada"});
+    } catch (error) {
+
+    }
+
 
     await usuarioModel.updateOne({"usuario": usuario},{"contraseña": nuevaContraseña , "recuperar": false})
     return res.status(200).send({ estado: "Ok", msg: "Contraseña Actualizada"});

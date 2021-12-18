@@ -6,17 +6,17 @@ const envioSchema = new Schema({
         required: true,
     },
     alto: {
-        type: "double",
+        type: "number",
         required: true,
         min: 1
     },
     largo: {
-        type: "double",
+        type: "number",
         required: true,
         min: 1
     },
     ancho: {
-        type: "double",
+        type: "number",
         required: true,
         min: 1
     },
@@ -47,7 +47,7 @@ const envioSchema = new Schema({
         min: 4
     },
     documentoentrega: {
-        type: "string",
+        type: "number",
         required: true,
         min: 6
     },
@@ -55,6 +55,28 @@ const envioSchema = new Schema({
         type: "string",
         required: true,
         min: 4
+    },
+    usuario:{
+        type: Schema.ObjectId,
+        ref: "usuarios"
+    },
+    asignado:{
+        type: "boolean"
+    },
+    encargado:{
+        type: "string"
+    },
+    estado:{
+        type: "string"
+    },
+    caracteristicasfinales:{
+        type: "string"
+    },
+    comentarios:{
+        type: "string"
+    },
+    fechaentrega:{
+        type: "date"
     }
 
 
