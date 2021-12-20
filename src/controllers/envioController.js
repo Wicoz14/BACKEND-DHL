@@ -3,7 +3,7 @@ const rutasEnvio = Router();
 const { envioModel } = require("../models/envioModel.js");
 const { verify } = require("jsonwebtoken");
 
-rutasEnvio.post("/registrarenvio",async function (req, res) {
+rutasEnvio.post("/registrarrenvio",async function (req, res) {
     const authorization = req.headers.authorization;
     const token = authorization.split(" ")[1];
     const payload = await verify(token, process.env.JWT_SECRET_KEY);
