@@ -2,11 +2,11 @@
   "name": "backend-dhl",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && node ./build/server.js",
-    "dev": "nodemon --exec ./node_modules/.bin/babel-node src/server.js",
+    "start": "npm run build && node ./build/app.js",
+    "dev": "nodemon --exec ./node_modules/.bin/babel-node src/app.js",
     "build:babel": "babel -d ./build ./src -s",
     "build": "npm run build:babel",
     "prettier": "prettier src/**/*.js",
@@ -16,6 +16,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "babel-cli": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
@@ -25,11 +30,10 @@
     "nodemailer": "^6.7.2",
     "randomstring": "^1.2.1"
   },
+  "engines": {
+    "node": "16.13.1"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.0",
-    "@babel/node": "^7.16.0",
-    "@babel/preset-env": "^7.16.4",
     "eslint": "^7.32.0",
     "eslint-config-node": "^4.1.0",
     "eslint-config-prettier": "^8.3.0",

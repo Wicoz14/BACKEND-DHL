@@ -41,6 +41,32 @@ rutasUsuarioMensajeria.post("/estados",async function (req, res) {
 });
 
 
+rutasUsuarioMensajeria.post("/modificarestados",async function (req, res) {
+    const authorization = req.headers.authorization;
+    const token = authorization.split(" ")[1];
+    const payload = await verify(token, process.env.JWT_SECRET_KEY);
+    const respuesta = req.body;
+    if(payload.rol==="usuariomensajeria"){
+        await envioModel.updateOne({ "_id" : respuesta._id},{"caracteristicasfinales": respuesta.caracteristicasfinales, "comentarios": respuesta.comentarios, "fechaentrega": respuesta.fechaentrega, "estado": respuesta.estadoenvio});
+        return res.status(200).send({ estado: "Ok", msg: "Estado modificado"});
+    }
+    return res.status(500).send({ estado: "Error", msg: "No Fue Modificado El Estado" });
+    
+});
+
+rutasUsuarioMensajeria.post("/reportes",async function (req, res) {
+    const authorization = req.headers.authorization;
+    const token = authorization.split(" ")[1];
+    const payload = await verify(token, process.env.JWT_SECRET_KEY);
+    const respuesta = req.body;
+    if(payload.rol==="usuariomensajeria"){
+        const reportes = await envioModel.find({"estado": respuesta.estado, "ciudad": respuesta.ciudad, "fecharecogida": respuesta.fecha});
+        return res.status(200).send({ estado: "Ok", reportes })
+    }
+    return res.status(500).send({ estado: "Error", msg: "No Exiten Listas" });
+    
+});
+
 
 
 exports.rutasUsuarioMensajeria = rutasUsuarioMensajeria;

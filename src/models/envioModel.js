@@ -2,7 +2,7 @@ const { model, Schema } = require("mongoose");
 
 const envioSchema = new Schema({
     fecharecogida: {
-        type: "date",
+        type: "string",
         required: true,
     },
     alto: {
@@ -76,7 +76,7 @@ const envioSchema = new Schema({
         type: "string"
     },
     fechaentrega:{
-        type: "date"
+        type: "string"
     }
 
 
