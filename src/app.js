@@ -21,6 +21,6 @@ mongoose.connect(process.env.URL_database) //conexión a la BD
     .catch(error => console.log(error));
 
 
-app.listen(+process.env.PUERTO || 3000, () => {
+app.listen(process.env.PORT || 5000, () => {
     console.log("Servidor escuchando en el puerto...")
 })
