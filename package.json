@@ -2,13 +2,13 @@
   "name": "backend-dhl",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && babel-node ./build/app.js",
+    "start": "npm run build && node ./build/app.js",
     "dev": "nodemon --exec ./node_modules/.bin/babel-node src/server.js",
     "build:babel": "babel -d ./build ./src -s",
-    "build": "npm run build:babel",
+    "build": "npm run build",
     "prettier": "prettier src/**/*.js",
     "prettier:fix": "prettier --write src/**/*.js"
   },
