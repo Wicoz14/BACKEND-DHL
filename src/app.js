@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const app = express();
 const {rutasUsuario} = require("./controllers/usuarioController.js");
 const {rutasEnvio} = require("./controllers/envioController.js");
+const {rutasDashboard} = require("./controllers/mensajeroController.js"); 
 const {rutasUsuarioMensajeria} = require("./controllers/usuarioMensajeriaController.js")
 const {rutasPerfil} = require("./controllers/perfilController.js");
 require("dotenv").config();
@@ -15,6 +16,7 @@ app.use("/usuario", rutasUsuario);//Recortar rutas
 app.use("/envios", rutasEnvio);
 app.use("/usuariomensajeria", rutasUsuarioMensajeria);
 app.use("/perfil", rutasPerfil);
+app.use("/dashboard", rutasDashboard); 
 
 mongoose.connect(process.env.URL_database) //conexión a la BD
     .then(res => console.log("Conectado a DB"))
@@ -23,4 +25,4 @@ mongoose.connect(process.env.URL_database) //conexión a la BD
 
 app.listen(process.env.PORT || 5000, () => {
     console.log("Servidor escuchando en el puerto...")
-})
+
