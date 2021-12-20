@@ -25,6 +25,9 @@
     "nodemailer": "^6.7.2",
     "randomstring": "^1.2.1"
   },
+  "engines": {
+    "node": "16.13.1"
+  },
   "devDependencies": {
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
