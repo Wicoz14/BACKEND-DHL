@@ -14,7 +14,7 @@ rutasEnvio.post("/registrarenvio",async function (req, res) {
         if (error) {
             return res.status(500).send({ estado: "Error", msg: "Error: Registro No Guardado" });
         }
-        return res.status(200).send({ estado: "Ok", msg: "Registro Guardado" })
+        return res.status(200).send({ estado: "Ok", msg: "Envío guardado" })
     });
 });
 
