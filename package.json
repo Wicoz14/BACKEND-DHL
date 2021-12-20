@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run build && babel-node ./build/app.js",
+    "start": "npm run build && node ./build/app.js",
     "dev": "nodemon --exec ./node_modules/.bin/babel-node src/server.js",
     "build:babel": "babel -d ./build ./src -s",
     "build": "npm run build:babel",
@@ -16,6 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
